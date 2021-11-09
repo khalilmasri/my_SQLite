@@ -50,6 +50,8 @@ To run the request after uncommenting
 ```rb 
 ruby my_sqlite_request.rb
 ```
+**IMPORTANT**
+Please comment the `request.run` after finishing with request side **OR** client side won't work.
 #
 ### Client
 
@@ -94,6 +96,12 @@ UPDATE nba_player_data.csv SET position =G WHERE name ='Don Adams'
 **DELETE** command will delete a certain row in the csv where you specified. Needs to be followed by **FROM** and the **csv file** and **WHERE**. EX:
 ```rb
 DELETE FROM nba_player_data.csv WHERE name ='Don Adams' 
+```
+#
+###### QUIT
+**QUIT** to quit the client
+```rb
+QUIT
 ```
 
 
