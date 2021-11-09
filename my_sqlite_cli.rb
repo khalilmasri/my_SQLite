@@ -78,7 +78,7 @@ class MySqliteQueryCli
     else
       return -1
     end
-    puts @count_input
+    
     if @count_input != @buffer_values.size
       return -1
     end
@@ -142,6 +142,10 @@ class MySqliteQueryCli
     @request = @request.delete
     @request = @request.from(@filename)
     @count_input = 3
+        
+    if check_index(@buffer_values, 'WHERE') == -1
+        return -1
+    end
 
     index = @buffer_values.index('WHERE')+1
     if(@buffer_values == nil)
@@ -183,13 +187,13 @@ class MySqliteQueryCli
     end
     if(@filename == nil)
       puts 'Wrong .csv file.'
-      return 0
+      return -2
     end
     
-    if check_file_exist <= 0
+    if check_file_exist(@filename) <= 0
         puts 'File provided is empty.'
         puts "You can download one here https://storage.googleapis.com/qwasar-public/nba_player_data.csv"
-        return 0
+        return -2
     end
 
     # Start taking action of one of the exists 
