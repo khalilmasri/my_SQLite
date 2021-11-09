@@ -98,6 +98,13 @@ class MySqliteRequest
     if @table_name == nil
       @table_name = @filename
     end
+
+    if check_file_exist(@table_name) <= 0
+        puts 'File provided is empty.'
+        puts "You can download one here https://storage.googleapis.com/qwasar-public/nba_player_data.csv"
+        return 0
+    end
+
     if(@type_of_request == :select)
       _run_select
     elsif(@type_of_request == :insert)
@@ -148,11 +155,11 @@ def _main()
 
     ## UNCOMMENT ONLY ONE BLOCK AT A TIME (A BLOCK ENDS WHITH ## ==================================)
 
-    
-    ## SELECT with no where
+
+    # SELECT with no where
     # request = request.from('nba_player_data.csv')
     # request = request.select('name') # BE CAREFUL this one will print 4300+ lines
-    ## ==================================
+    # ==================================
 
     ## SELECT With one where
     # request = request.from('nba_player_data.csv')
@@ -185,13 +192,8 @@ def _main()
     # request = request.where('weight', '210')
     ## ==================================
 
-    ## UNCOMMENT ALL THE NEXT PART IF YOU USE THE REQUEST SIDE
-
-    # if check_file_exist(@table_name) <= 0
-    #     puts 'File provided is empty.'
-    #     puts "You can download one here https://storage.googleapis.com/qwasar-public/nba_player_data.csv"
-    #     return 0
-    # end
+    ## UNCOMMENT ALL THE NEXT PART IF YOU USE THE REQUEST SIDE AND COMMENT AGAIN AFTER
+    ## VERY VERY IMPORTANT TO COMMENT IT AGAIN AFTER YOU FINISH USING REQUEST SIDE **OR** Client side wont work
     # request.run
 end
 
