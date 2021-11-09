@@ -146,6 +146,9 @@ end
 def _main()
     request = MySqliteRequest.new
 
+    ## UNCOMMENT ONLY ONE BLOCK AT A TIME (A BLOCK ENDS WHITH ## ==================================)
+
+    
     ## SELECT with no where
     # request = request.from('nba_player_data.csv')
     # request = request.select('name') # BE CAREFUL this one will print 4300+ lines
