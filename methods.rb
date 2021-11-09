@@ -1,9 +1,12 @@
 KEYWORDS = ["SELECT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE", "INTO", "SET"]
 
 def check_file_exist(table_name)
+    if File.exist?(table_name) != true
+        return -1
+    end
     csv = CSV.open(table_name, 'r', col_sep: '', quote_char: "\x00")
-    csv_table = CSV.table(@table_name)
-    csv_table.count
+    csv_table = CSV.table(table_name)
+    return csv_table.count
 end
 
 def check_index(array, key)
@@ -141,9 +144,9 @@ def insert_new
     end
     update()
   else
-    CSV.open(@table_name, 'a', :row_sep => "\n", :col_sep => ",") do |csv| 
-      csv << @insert_attributes.values
-    end
+    @table = CSV.table(@table_name)
+    @table.push(@insert_attributes.values)
+    update()
   end
 end
 
