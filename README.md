@@ -73,13 +73,13 @@ SELECT * FROM nba_player_data.csv
 SELECT can accept also a **WHERE** followed by value from the header of the csv (name, year_start, year_end, position, height, weight, birth_date, college)
 
 ```rb 
-SELECT name FROM nba_player_data.csv name ='Don Adams'
+SELECT name FROM nba_player_data.csv WHERE name ='Don Adams'
 ```
 #
 #### INSERT
 **INSERT** command can insert **INTO** the **csv file** and then followed by the **VALUES** you want to add. EX:
 ```rb
-INSERT INTO nba_player_data.csv VALUES (Don Adams, 1971, 1977, F,6-6, 210, November 27, 1947,Northwestern University) 
+INSERT INTO nba_player_lite1.csv VALUES (Don Adams, 1971, 1977, F,6-6, 210, November 27, 1947,Northwestern University)
 ```
 
 #
