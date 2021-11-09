@@ -139,32 +139,57 @@ class MySqliteRequest
 
   def _run_join
     join_tables()
-    # update()
+    update()
   end
 end
 
 def _main()
-  request = MySqliteRequest.new
+    request = MySqliteRequest.new
 
-  request = request.from('nba_player_lite1.csv')
-  request = request.select('name')
-  request = request.where('college','Duke University')
-  request = request.where('weight', '210')
-  
-  # request = MySqliteRequest.new
-  # request = request.insert('nba_player_lite1.csv')
-  # request = request.values({"name" => "Don Adams", "year_start" => "1971", "year_end" => "1977", "position" => "F", "height" => "6-6", "weight" => "210", "birth_date" => "November 27, 1947", "college" => "Northwestern University"})
-  # request.run
+    ## SELECT with no where
+    # request = request.from('nba_player_data.csv')
+    # request = request.select('name') # BE CAREFUL this one will print 4300+ lines
+    ## ==================================
 
-  # request = request.insert('nba_player_lite1.csv')
-  # request = request.values('name' => 'Alaa Renamed')
-  # request = request.where('name', 'Alaa Abdelnaby')
-  # request.run
-  
-  # request = request.delete
-  # request = request.from('nba_player_lite1.csv')
-  # request = request.where('weight', '210')
-  # request.run
+    ## SELECT With one where
+    # request = request.from('nba_player_data.csv')
+    # request = request.select('name')
+    # request = request.where('name', 'Don Adams')
+    ## ==================================
+
+    ## SELECT With multiple where
+    # request = request.from('nba_player_data.csv')
+    # request = request.select('name')
+    # request = request.where('name', 'Don Adams')
+    # request = request.where('weight', '210')
+    ## ==================================
+
+
+    ## INSERT a new line of csv
+    # request = request.insert('nba_player_data.csv')
+    # request = request.values({'name' => 'Alaa Abdelnaby', 'year_start' => '1991', 'year_end' => '1995', 'position' => 'F-C', 'height' => '6-10', 'weight' => '240', 'birth_date' => "June 24, 1968", 'college' => 'Duke University'})
+    ## ==================================
+
+    ## UPDATE a player
+    # request = request.insert('nba_player_data.csv')
+    # request = request.values('name' => 'Alaa Renamed')
+    # request = request.where('name', 'Alaa Abdelnaby')
+    ## ==================================
+    
+    ## DELETE one player who has WHERE
+    # request = request.delete
+    # request = request.from('nba_player_data.csv')
+    # request = request.where('weight', '210')
+    ## ==================================
+
+    ## UNCOMMENT ALL THE NEXT PART IF YOU USE THE REQUEST SIDE
+
+    # if check_file_exist(@table_name) <= 0
+    #     puts 'File provided is empty.'
+    #     puts "You can download one here https://storage.googleapis.com/qwasar-public/nba_player_data.csv"
+    #     return 0
+    # end
+    # request.run
 end
 
 _main()

@@ -1,5 +1,11 @@
 KEYWORDS = ["SELECT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE", "INTO", "SET"]
 
+def check_file_exist(table_name)
+    csv = CSV.open(table_name, 'r', col_sep: '', quote_char: "\x00")
+    csv_table = CSV.table(@table_name)
+    csv_table.count
+end
+
 def check_index(array, key)
   if array.include?(key)
     return array.index(key)+1
@@ -130,7 +136,7 @@ def insert_new
     @table = CSV.table(@table_name, headers:true)
     @table.each do |row|
       if row[:"#{@where_params[0][0]}"].to_s == @where_params[0][1].to_s
-        row[:"#{@where_params[0][0]}"] = @insert_attributes.values.join('"')
+        row[:"#{@insert_attributes.keys.first}"] = @insert_attributes.values.join('"')
       end
     end
     update()

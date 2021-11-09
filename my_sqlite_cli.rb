@@ -13,7 +13,6 @@ class MySqliteQueryCli
     if @buffer_values.include? ("=")
         @buffer_values.delete_at(@buffer_values.index("="))
     end
-    p @buffer_values.size
   end
 
   def select_opt
@@ -93,8 +92,8 @@ class MySqliteQueryCli
     @count_input = 2
 
     @request = @request.insert(@filename)
-    
-    if(@buffer_values[index] == nil and @buffer_values[index] != 'SET')
+ 
+    if(@buffer_values[index] == nil or @buffer_values[index] != 'SET')
       return -1
     end
     @count_input += 1
@@ -185,6 +184,12 @@ class MySqliteQueryCli
     if(@filename == nil)
       puts 'Wrong .csv file.'
       return 0
+    end
+    
+    if check_file_exist <= 0
+        puts 'File provided is empty.'
+        puts "You can download one here https://storage.googleapis.com/qwasar-public/nba_player_data.csv"
+        return 0
     end
 
     # Start taking action of one of the exists 
