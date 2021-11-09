@@ -86,8 +86,6 @@ class MySqliteRequest
   end
 
   def print
-    puts "type_of_request #{@type_of_request}"
-    puts "table_name #{@table_name}"
     if(@type_of_request == :select)
       print_select_type
     elsif (@type_of_request == :insert)
@@ -146,14 +144,13 @@ class MySqliteRequest
 end
 
 def _main()
-    request = MySqliteRequest.new
+  request = MySqliteRequest.new
 
-    request = request.from('nba_player_lite1.csv')
-    request = request.select('name')
-    request = request.where('college','Duke University')
-    request = request.where('weight', '210')
-    request.run
-    
+  request = request.from('nba_player_lite1.csv')
+  request = request.select('name')
+  request = request.where('college','Duke University')
+  request = request.where('weight', '210')
+  
   # request = MySqliteRequest.new
   # request = request.insert('nba_player_lite1.csv')
   # request = request.values({"name" => "Don Adams", "year_start" => "1971", "year_end" => "1977", "position" => "F", "height" => "6-6", "weight" => "210", "birth_date" => "November 27, 1947", "college" => "Northwestern University"})

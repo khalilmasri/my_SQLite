@@ -5,7 +5,14 @@ class MySqliteQueryCli
 
   def parse(buff)
     @buffer_values = []
-    @buffer_values = buff.split(" ")
+    if buff.include? 'VALUES'
+        @buffer_values = inserted_value_array(buff)
+    else
+        @buffer_values = buff.split(" ")
+    end
+    if @buffer_values.include? ("=")
+        @buffer_values.delete_at(@buffer_values.index("="))
+    end
     p @buffer_values.size
   end
 
@@ -13,6 +20,7 @@ class MySqliteQueryCli
 
     @request = @request.from(@filename)
     @count_input = 3
+   
 
     index = @buffer_values.index('SELECT')+1
     if @buffer_values[index] == nil 
@@ -31,10 +39,11 @@ class MySqliteQueryCli
       if value == nil
         return -1
       end
-      @count_input += 1 
+      @count_input += 2
+      index = @buffer_values.index('WHERE')+1
       @request = @request.where(@buffer_values[index],value)
     end
-
+    
     if @count_input != @buffer_values.size
       return -1
     end
@@ -45,7 +54,6 @@ class MySqliteQueryCli
   def insert_opt
  
     @count_input = 2
-
     index = @buffer_values.index('INSERT')+1
     if @buffer_values[index] == nil and @buffer_values[index] != 'INTO'
       return -1
@@ -53,11 +61,12 @@ class MySqliteQueryCli
     @count_input += 1 
 
     @reqiest = @request.insert(@filename)
-
+    p @buffer_values
     if @buffer_values.include? 'VALUES'
+        
       index = @buffer_values.index('VALUES')+1
       if @buffer_values[index] != nil
-        values = inserted_values(@buffer_values[index])
+        p values = inserted_values(index)
         if (values == nil)
           puts "Please add all the values correctly."
           return -1
@@ -70,7 +79,7 @@ class MySqliteQueryCli
     else
       return -1
     end
-
+    puts @count_input
     if @count_input != @buffer_values.size
       return -1
     end
@@ -102,7 +111,11 @@ class MySqliteQueryCli
     values = {}
     values[hash_name] = value.to_s
     @request = @request.values(values)
-
+    
+    if check_index(@buffer_values, 'WHERE') == -1
+        return -1
+    end
+    
     index = @buffer_values.index('WHERE')+1
     if(@buffer_values == nil)
       return -1

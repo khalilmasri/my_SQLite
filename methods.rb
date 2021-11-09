@@ -37,7 +37,7 @@ def check_value(index)
     @count_input += 1
     index+=1
   end
-  str = str.gsub("=", "").gsub("\"", "").chomp('\'').reverse.chomp('\'').reverse
+  str = str.gsub("=", "").gsub("\"", "").gsub('\'', '').chomp(' ').reverse.chomp(' ').reverse
   return str
 end
 
@@ -49,26 +49,27 @@ def select_where(by, index)
   return nil
 end
 
-def inserted_values(str)
-  str = str.gsub("(","").gsub(")", "")
-  array = str.split(',')
-  index = 0
+def inserted_values(index)
 
+    counter = 0
   list_values = CSV.open(@filename, &:readline)
 
   values = {}
 
   list_values.each do |hash|
     if hash == 'birth_date'
-      values[hash] = array[index].gsub("\"", "") + ',' + array[index+1].gsub("\"", "")
+      values[hash] = @buffer_values[index].gsub("\"", "") + ',' + @buffer_values[index+1].gsub("\"", "")
       index+=2
+      counter += 2
       next
     end
-    values[hash] = array[index].to_s.gsub("\n", "").gsub("\"", "")
+    values[hash] = @buffer_values[index].to_s.gsub("\n", "").gsub("\"", "")
     index+=1
+    counter += 1
   end
-
-  if index-1 != list_values.size
+  values.merge![Sep: "\n"]
+  @count_input += counter-1
+  if counter-1 != list_values.size
     return nil
   end
 
@@ -117,7 +118,11 @@ def show_select
       end
     end
   end
-  puts result
+  if (result.empty?)
+    puts "No match found!"
+  else
+    puts result
+  end
 end
 
 def insert_new
@@ -130,7 +135,7 @@ def insert_new
     end
     update()
   else
-    CSV.open(@table_name, 'ab', :row_sep => "", :col_sep => ",") do |csv| 
+    CSV.open(@table_name, 'a', :row_sep => "\n", :col_sep => ",") do |csv| 
       csv << @insert_attributes.values
     end
   end
@@ -173,4 +178,35 @@ def join_tables
     @table.push(row)
   end
 
+end
+
+def inserted_value_array(buff)
+    flag = buff.index('(')
+    index, current = 0,0
+    value = ''
+    while index < flag
+        if buff[index] == ' '
+            @buffer_values[current] = value
+            value = ''
+            current += 1
+            index += 1
+            next
+        end
+        value = value + buff[index]
+        index += 1
+    end
+
+    while buff[index] != ')' and buff[index] != nil
+        if buff[index] == ',' and buff[index+1] == ' '
+            value = value + buff[index]
+            index+=2
+        end
+        value = value + buff[index]
+        index += 1
+        
+    end
+   
+    valueArr = value.gsub('\'','').gsub('(', '').split(',') 
+    @buffer_values.concat valueArr
+    return @buffer_values
 end
